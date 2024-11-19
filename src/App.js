@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import UserList from "./components/UserList";
+import UserForm from "./components/UserForm";
+import ErrorBoundary from "./components/ErrorBoundary";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    showForm: false,
+    selectedUser: null,
+  };
+
+  toggleForm = (user = null) => {
+    this.setState({ showForm: !this.state.showForm, selectedUser: user });
+  };
+
+  render() {
+    const { showForm, selectedUser } = this.state;
+    return (
+      <div className="App">
+        <ErrorBoundary>
+          {!showForm ? (
+            <UserList onOpenForm={this.toggleForm} />
+          ) : (
+            <UserForm
+              user={selectedUser}
+              onClose={this.toggleForm}
+              onRefresh={() => window.location.reload()}
+            />
+          )}
+        </ErrorBoundary>
+      </div>
+    );
+  }
 }
 
 export default App;
